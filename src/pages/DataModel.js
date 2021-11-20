@@ -6,8 +6,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import { navigate } from "hookrouter";
+import { resolveRef } from "../utils";
 
-const basicTypes = ['string', 'number', 'integer', 'boolean', 'null']
+var _ = require('lodash');
+
+const basicTypes = ['string', 'number', 'integer', 'boolean', 'null','link']
 // const arrayType = 'array'
 // const objectType = 'object'
 
@@ -28,31 +31,38 @@ const getRowHead = ({ properties }) => {
   return { res, sequence }
 }
 
-export default function Business({ id }) {
+export default function DataModel({ schemaId }) {
 
   const [schema, setSchema] = useState(null)
   const [uiSchema, setUiSchema] = useState(null)
   const [heads, setHeads] = useState(null)
   const [sequence, setSequence] = useState(null)
   const [rows, setRows] = useState(null)
+  const [resolvedSchema,setResolvedSchema]=useState(null)
 
   useEffect(() => {
-    DataModelReq.get(id).then(data => {
-      var { formschema: { uischema, fieldschema } } = data
-      fieldschema = fieldschema ? fieldschema : {}
-      uischema = uischema ? uischema : {}
-      setSchema(fieldschema)
-      setUiSchema(uischema)
+    setSchema(null)
+    setUiSchema(null)
+    setHeads(null)
+    setSequence(null)
+    setRows(null)
+    setResolvedSchema(null)
 
-      const { res, sequence: seq } = getRowHead(fieldschema)
+    DataModelReq.get(schemaId).then(data => {
+      var { formschema: { uischema, fieldschema } } = data
+      var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
+      setSchema(fieldschema)
+      setResolvedSchema(newResolveSchema)
+      setUiSchema(uischema)
+      const { res, sequence: seq } = getRowHead(newResolveSchema)
       setHeads(res)
       setSequence(seq)
     })
-  }, [id])
+  }, [schemaId])
 
   useEffect(() => {
     if (sequence) {
-      BusinessReq.getAllFromDataModelId(id).then(data => {
+      BusinessReq.getFromGraphQL(schema,resolvedSchema).then(data=>{
         setRows(data)
       })
     }
@@ -65,7 +75,7 @@ export default function Business({ id }) {
         color="primary"
         style={{ width: '100px', backgroundColor: 'blue', borderRadius: '5px', margin: '10px' }}
         onClick={() => {
-          navigate(`/createbusiness/${id}`)
+          navigate(`/createbusiness/${schemaId}`)
         }}
       >
         <AddIcon style={{ color: 'white' }} fontSize="small" />
@@ -79,21 +89,30 @@ export default function Business({ id }) {
         <TableBody>
           {rows ? rows.map(row => {
             var cells = []
-            const { id: formdataId, formdata } = row
             sequence.forEach((key) => {
-              if (formdata.hasOwnProperty(key)) {
-                cells.push(<TableCell key={key} align="center">{formdata[key]}</TableCell>)
+              if (row.hasOwnProperty(key)) {
+                if(schema.properties[key].hasOwnProperty('$ref')){
+                  const k=resolvedSchema.properties[key].value==='id'?'_id':resolvedSchema.properties[key].value
+                  cells.push(<TableCell key={key} align="center">{row[key][k]}</TableCell>)
+                }else{
+                  cells.push(<TableCell key={key} align="center">{row[key]}</TableCell>)
+                }
               } else {
-                cells.push(<TableCell key={key} align="center"></TableCell>)
+                if(key==='id'){
+                  cells.push(<TableCell key={key} align="center">{row['_id']}</TableCell>)
+                }else{
+                  cells.push(<TableCell key={key} align="center"></TableCell>)
+                }
+                
               }
             })
             cells.push(
-              <TableCell key='操作' align="center">
+              <TableCell key='操作' align="center">
                 <IconButton
                   aria-label="edit"
                   color="primary"
                   onClick={() => {
-                    navigate(`/business/${formdataId}`)
+                    navigate(`/business/${schemaId}/${row['_id']}`)
                   }}
                 >
                   <EditIcon fontSize="small" />
@@ -102,16 +121,16 @@ export default function Business({ id }) {
                   aria-label="delete"
                   color="secondary"
                   onClick={() => {
-                    BusinessReq.delete(formdataId).then(data => {
-                      setRows(data)
-                    })
+                    // BusinessReq.delete(formdataId).then(data => {
+                    //   setRows(data)
+                    // })
                   }}
                 >
                   <DeleteIcon fontSize="small" />
                 </IconButton>
               </TableCell>)
             return (
-              <TableRow key={formdataId}>
+              <TableRow key={row['_id']}>
                 {cells}
               </TableRow>)
           }) : null}

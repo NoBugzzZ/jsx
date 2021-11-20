@@ -8,9 +8,9 @@ import CreateBusiness from './pages/CreateBusiness';
 
 const routes = {
     '/': () => <HomePage />,
-    '/datamodel/:id': ({ id }) => <DataModel id={id} />,
-    '/business/:id': ({ id }) => <Business id={id} />,
-    '/createbusiness/:id': ({ id }) => <CreateBusiness id={id} />
+    '/datamodel/:schemaId': ({ schemaId }) => <DataModel schemaId={schemaId} />,
+    '/business/:schemaId/:id': ({ schemaId,id }) => <Business schemaId={schemaId} id={id} />,
+    '/createbusiness/:schemaId': ({ schemaId }) => <CreateBusiness schemaId={schemaId}/>
 };
 
 const Route = () => {

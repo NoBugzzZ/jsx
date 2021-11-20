@@ -1,14 +1,85 @@
+import axios from "axios"
+import { create } from "lodash"
+import { getReponse } from "../utils"
+
+const api = "http://192.168.28.164:8090/graphql"
+
 export default {
   async getAllFromDataModelId(id) {
     return mock
   },
-  async delete(id){
-    mock=mock.filter(e=>e.id!==id)
+  async delete(id) {
+    mock = mock.filter(e => e.id !== id)
     return mock
   },
-  async get(id){
-    return mock.find(e=>e.id===parseInt(id))
-  }
+  async get(id) {
+    return mock.find(e => e.id === parseInt(id))
+  },
+  async getFromGraphQL(schema, resolvedSchema) {
+    var { title } = schema
+    title = title.substring(0, 1).toLowerCase() + title.substring(1)
+    const response = getReponse(schema.properties, resolvedSchema.properties)
+    const query = `{
+      query_${title}_list{
+        _id
+        ${response}
+      }
+    }`
+    console.log(query)
+    const { data } = await axios.post(api, query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+    console.log(data)
+    if(data){
+      return data[Object.keys(data)[0]]
+    }else{
+      return []
+    }
+    
+  },
+  async getFromGraphQLById(id, schema, resolvedSchema) {
+    var { title } = schema
+    title = title.substring(0, 1).toLowerCase() + title.substring(1)
+    const response = getReponse(schema.properties, resolvedSchema.properties)
+    const query = `{
+      query_${title}(_id:"${id}"){
+        _id
+        ${response}
+      }
+    }`
+    console.log(query)
+    const { data } = await axios.post(api, query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+    console.log(data)
+    return data[Object.keys(data)[0]]
+  },
+  async create(schema,formData){
+    var { title } = schema
+    title = title.substring(0, 1).toLowerCase() + title.substring(1)
+    const query=`{
+      create_${title}(
+        data:${JSON.stringify(formData,null,2).replace(/"([^"]+)":/g, '$1:')}
+        ){
+        _id
+      }
+    }`
+    console.log(query)
+    const {data}=await axios.post(api, query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+    console.log(data)
+    return data
+  },
+  async getSource(schema){
+
+  },
 }
 
 var mock = [
@@ -25,8 +96,8 @@ var mock = [
       "appendix": "备注",
       "customer": "客户"
     },
-    lifecycle:{
-      schema:{
+    lifecycle: {
+      schema: {
         uischema: {
           "date": {
             "ui:widget": "date"
@@ -114,8 +185,8 @@ var mock = [
       "appendix": "备注",
       "customer": "客户"
     },
-    lifecycle:{
-      schema:{
+    lifecycle: {
+      schema: {
         uischema: {
           "date": {
             "ui:widget": "date"

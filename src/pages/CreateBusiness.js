@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { DataModelReq, FlowModelReq } from "../requests"
-import Form from "@rjsf/material-ui"
+import { DataModelReq, FlowModelReq, BusinessReq } from "../requests"
+import CustomForm from "../components/Form/CustomForm";
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -8,6 +8,9 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import Graph from '../components/Graph/Graph'
+import { resolveRef } from "../utils";
+
+var _ = require('lodash');
 
 const graphOptions = {
   physics: {},
@@ -17,36 +20,44 @@ const graphOptions = {
   },
 };
 
-export default function CreateBusiness({ id }) {
+export default function CreateBusiness({ schemaId }) {
 
   const [schema, setSchema] = useState({})
   const [uiSchema, setUiSchema] = useState({})
+  const [resolvedSchema, setResolvedSchema] = useState({})
 
   const [flowModels, setFlowModels] = useState([])
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
 
   useEffect(() => {
-    DataModelReq.get(id).then(data => {
-      console.log(data)
+    DataModelReq.get(schemaId).then(data => {
       const { formschema: { uischema, fieldschema } } = data
-      setUiSchema(uischema)
+      var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
       setSchema(fieldschema)
+      setResolvedSchema(newResolveSchema)
+      setUiSchema(uischema)
     })
-  }, [id])
+  }, [schemaId])
 
   useEffect(() => {
     FlowModelReq.getAll().then(data => {
-      console.log(data)
       setFlowModels(data)
     })
   }, [])
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>
         <Paper style={{ padding: '30px', margin: '30px' }} elevation={1}>
-          <Form
-            schema={schema}
+          <CustomForm
+            schema={resolvedSchema}
             uiSchema={uiSchema}
+            onSubmit={({ formData }) => {
+              console.log(formData)
+              BusinessReq.create(schema,formData).then(data=>{
+                console.log(data)
+              })
+            }}
           />
         </Paper>
       </Grid>
@@ -89,12 +100,12 @@ export default function CreateBusiness({ id }) {
                 })}
               </NativeSelect>
             </FormControl>
-            <div style={{height:'400px'}}>
-            <Graph
-              identifier={"customed-flow-graph"}
-              graph={graph}
-              options={graphOptions}
-            />
+            <div style={{ height: '400px' }}>
+              <Graph
+                identifier={"customed-flow-graph"}
+                graph={graph}
+                options={graphOptions}
+              />
             </div>
           </Box>
         </Paper>

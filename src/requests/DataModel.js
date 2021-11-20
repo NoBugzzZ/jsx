@@ -1,7 +1,19 @@
+import axios from "axios"
+
+const api="http://localhost:3000/"
+
 export default {
   async get(id) {
-    const data = mock.find(element => element.id === parseInt(id))
-    return data ? data : {}
+    // const data = mock.find(element => element.id === parseInt(id))
+    // return data ? data : {}
+    const {data} =await axios.request({
+      url:api+id,
+      method:'GET',
+      headers:{
+        "Content-Type":"application/json"
+      }
+    })
+    return data
   }
 }
 
