@@ -1,8 +1,9 @@
 import axios from "axios"
 import { create } from "lodash"
 import { getReponse } from "../utils"
+import { API_URL } from "../config"
 
-const api = 'http://192.168.28.215:8090/graphql'
+const api = API_URL.BUSINESS
 
 export default {
   async getAllFromDataModelId(id) {

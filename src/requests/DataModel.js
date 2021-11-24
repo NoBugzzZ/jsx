@@ -1,7 +1,7 @@
 import axios from "axios"
+import { API_URL } from '../config'
 
-const api = "http://localhost:3000/"
-const graphQLApi = 'http://192.168.28.215:8090/graphql'
+const api=API_URL.DATA_MODEL
 
 export default {
   async get(id) {
@@ -20,7 +20,7 @@ export default {
     const query = `{
       query_schemas{...}
     }`
-    const { data } = await axios.post(graphQLApi, query, {
+    const { data } = await axios.post(api, query, {
       headers: {
         'Content-Type': 'text/plain',
       }
