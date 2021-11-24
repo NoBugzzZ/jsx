@@ -1,6 +1,6 @@
 import axios from "axios"
 import { create } from "lodash"
-import { getReponse } from "../utils"
+import { getReponse, getReponseForOne } from "../utils"
 import { API_URL } from "../config"
 
 const api = API_URL.GRAPHQL
@@ -43,7 +43,7 @@ export default {
   async getFromGraphQLById(id, schema, resolvedSchema) {
     var { title } = schema
     title = title.substring(0, 1).toLowerCase() + title.substring(1)
-    const response = getReponse(schema.properties, resolvedSchema.properties)
+    const response = getReponseForOne(schema.properties, resolvedSchema.properties)
     const query = `{
       query_${title}(_id:"${id}"){
         _id

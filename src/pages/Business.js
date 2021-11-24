@@ -9,13 +9,14 @@ var _ = require('lodash');
 const traverse=(schemaProperties,resolvedSchemaProperties,formData)=>{
   for (let key in schemaProperties) {
     if(schemaProperties[key].hasOwnProperty('$ref')){
-      formData[key]=formData[key][resolvedSchemaProperties[key].value]
+      const k=resolvedSchemaProperties[key].key==='id'?'_id':resolvedSchemaProperties[key].key
+      formData[key]=formData[key][k]
     }else{
       if (schemaProperties[key].type === 'object') {
         traverse(schemaProperties[key].properties,resolvedSchemaProperties[key].properties,formData[key])
       }else if(schemaProperties[key].type==='array'){
         if(schemaProperties[key].items.hasOwnProperty('$ref')){
-          const k=resolvedSchemaProperties[key].items.value==='id'?'_id':resolvedSchemaProperties[key].items.value
+          const k=resolvedSchemaProperties[key].items.key==='id'?'_id':resolvedSchemaProperties[key].items.key
           formData[key]=formData[key].map(e=>e[k])
         }else{
 

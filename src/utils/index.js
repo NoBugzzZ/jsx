@@ -1,13 +1,13 @@
 import { API_URL } from '../config'
 
-var jref = require('json-ref-lite')
+// var jref = require('json-ref-lite')
 
 const resolveRef = (schema) => {
   // return jref.resolve(schema)
   if (schema.hasOwnProperty('$ref')) {
     delete schema['$ref']
     schema['type'] = 'link'
-    schema['url']=API_URL.GRAPHQL
+    schema['url'] = API_URL.GRAPHQL
   } else {
     const { type } = schema
     if (type === 'object') {
@@ -52,9 +52,50 @@ const getReponse = (schemaProperties, resolvedSchemaProperties) => {
   return response
 }
 
+const getK = (key, value) => {
+  var k = ''
+  if (value === key) {
+    k = value === 'id' ? '_id' : value
+  } else {
+    k = key === 'id' ? '_id' : key
+    k+='\n'
+    k +=  value === 'id' ? '_id' : value
+  }
+  return k
+}
+
+const getReponseForOne = (schemaProperties, resolvedSchemaProperties) => {
+  let response = ''
+  for (let key in schemaProperties) {
+    if (schemaProperties[key].hasOwnProperty('$ref')) {
+      var k = getK(resolvedSchemaProperties[key].key, resolvedSchemaProperties[key].value)
+      response = response + key + '{\n  ' + k + '\n}\n'
+    } else {
+      if (schemaProperties[key].type === 'object') {
+        response = response + key + '{\n' + getReponse(schemaProperties[key].properties) + '}'
+      } else if (schemaProperties[key].type === 'array') {
+        // response = response + key + 
+        if (schemaProperties[key].items.hasOwnProperty('$ref')) {
+          var k = getK(resolvedSchemaProperties[key].items.key, resolvedSchemaProperties[key].items.value)
+          response = response + key + '{\n  ' + k + '\n}\n'
+        } else {
+
+        }
+      } else {
+        if (key === 'id') {
+
+        } else {
+          response = response + key + '\n'
+        }
+      }
+    }
+  }
+  return response
+}
+
 const resolveRefSource = (schema, sourceUrl) => {
   if (schema.hasOwnProperty('$ref') && schema.hasOwnProperty('source')) {
-    schema['source'] = schema['source'].replace('${base_url}',sourceUrl)
+    schema['source'] = schema['source'].replace('${base_url}', sourceUrl)
   } else {
     const { type } = schema
     if (type === 'object') {
@@ -68,4 +109,4 @@ const resolveRefSource = (schema, sourceUrl) => {
   return schema
 }
 
-export { resolveRef, getReponse, resolveRefSource }
+export { resolveRef, getReponse, resolveRefSource, getReponseForOne }
