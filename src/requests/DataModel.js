@@ -1,6 +1,7 @@
 import axios from "axios"
+import { API_URL } from '../config'
 
-const api="http://localhost:3000/"
+const api=API_URL.DATA_MODEL
 
 export default {
   async get(id) {
