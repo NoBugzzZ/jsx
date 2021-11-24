@@ -3,7 +3,7 @@ import { create } from "lodash"
 import { getReponse } from "../utils"
 import { API_URL } from "../config"
 
-const api = API_URL.BUSINESS
+const api = API_URL.GRAPHQL
 
 export default {
   async getAllFromDataModelId(id) {

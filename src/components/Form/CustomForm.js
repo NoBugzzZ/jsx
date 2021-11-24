@@ -3,7 +3,6 @@ import React from "react";
 import CustomDate from "./CustomDate";
 import CustomMonth from "./CustomMonth";
 // import CustomFile from "./CumtomFile"
-import Link from "./Link";
 
 {/**usage
 
@@ -34,9 +33,6 @@ export default function (props) {
     // "link": Link,
   }
 
-  const field={
-
-  }
   return (
     <Form
       onSubmit={props.onSubmit}

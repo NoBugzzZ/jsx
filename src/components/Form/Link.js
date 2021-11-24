@@ -19,7 +19,7 @@ export default function (props) {
   const classes = useStyles();
 
   const [value, setValue] = React.useState('');
-  const [sourceData, setSourceData] = useState([])
+  // const [sourceData, setSourceData] = useState([])
   const [source, setSource] = useState('')
   const [key, setKey] = useState('')
   const [label, setLabel] = useState('')
@@ -33,7 +33,7 @@ export default function (props) {
   useEffect(() => {
     const { schema: { title, source, key }, label: name,value: formData } = props
     const label = title ? title : (name ? name : '')
-    const newValue = `${formData}` ? `${formData}` : ''
+    // const newValue = `${formData}` ? `${formData}` : ''
     setValue(formData)
     setKey(key)
     setLabel(label)
@@ -49,7 +49,7 @@ export default function (props) {
           "Content-Type": "application/json"
         }
       }).then(({ data }) => {
-        setSourceData(data)
+        // setSourceData(data)
         setMenuItems(data.map(s => {
           return <MenuItem key={s[key]} value={s[key]}>{s[key]}</MenuItem>
         }))

@@ -56,6 +56,7 @@ export default function CreateBusiness({ schemaId }) {
               console.log(formData)
               BusinessReq.create(schema,formData).then(data=>{
                 console.log(data)
+                alert('创建成功')
               })
             }}
           />
@@ -70,7 +71,7 @@ export default function CreateBusiness({ schemaId }) {
               </InputLabel>
               <NativeSelect
                 onChange={(e) => {
-                  const flowModel = flowModels.find(flowModel => flowModel.id == e.target.value)
+                  const flowModel = flowModels.find(flowModel => flowModel.id === e.target.value)
                   if (flowModel) {
                     const { lifecycle: { enkrino: { graph: selectedGraph, start } } } = flowModel
                     let newGraph = { ...selectedGraph }

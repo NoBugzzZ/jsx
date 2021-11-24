@@ -1,7 +1,8 @@
 import axios from "axios"
 import { API_URL } from '../config'
-
-const api=API_URL.DATA_MODEL
+// import { resolveRefSource } from "../utils"
+// var _ = require('lodash');
+const api=API_URL.GRAPHQL
 
 export default {
   async get(id) {
@@ -25,7 +26,10 @@ export default {
         'Content-Type': 'text/plain',
       }
     })
-    const res = data[id]
+    var res = data[id]
+    // var {formschema:{fieldschema}}=res
+    // fieldschema=resolveRefSource(_.cloneDeep(fieldschema),API_URL.SOURCE)
+    // res.formschema.fieldschema=fieldschema
     console.log(res)
     return res
   }

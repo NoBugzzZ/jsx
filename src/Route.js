@@ -2,7 +2,6 @@ import { useRoutes } from 'hookrouter';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import DataModel from './pages/DataModel';
-import Deposit from './pages/Deposit';
 import Business from './pages/Business';
 import CreateBusiness from './pages/CreateBusiness';
 
