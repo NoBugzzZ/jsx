@@ -37,7 +37,7 @@ export default function Business({ schemaId,id }) {
   const [resolvedSchema,setResolvedSchema]=useState({})
 
   useEffect(() => {
-    DataModelReq.get(schemaId).then(data => {
+    DataModelReq.getFromGrapgQL(schemaId).then(data => {
       var { formschema: { uischema, fieldschema } } = data
       var newResolvedSchema = resolveRef(_.cloneDeep(fieldschema))
       setSchema(fieldschema)

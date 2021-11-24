@@ -48,7 +48,17 @@ export default function DataModel({ schemaId }) {
     setRows(null)
     setResolvedSchema(null)
 
-    DataModelReq.get(schemaId).then(data => {
+    // DataModelReq.get(schemaId).then(data => {
+    //   var { formschema: { uischema, fieldschema } } = data
+    //   var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
+    //   setSchema(fieldschema)
+    //   setResolvedSchema(newResolveSchema)
+    //   setUiSchema(uischema)
+    //   const { res, sequence: seq } = getRowHead(newResolveSchema)
+    //   setHeads(res)
+    //   setSequence(seq)
+    // })
+    DataModelReq.getFromGrapgQL(schemaId).then(data => {
       var { formschema: { uischema, fieldschema } } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
       setSchema(fieldschema)

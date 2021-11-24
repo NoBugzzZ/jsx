@@ -1,19 +1,33 @@
 import axios from "axios"
 
-const api="http://localhost:3000/"
+const api = "http://localhost:3000/"
+const graphQLApi = 'http://192.168.28.215:8090/graphql'
 
 export default {
   async get(id) {
     // const data = mock.find(element => element.id === parseInt(id))
     // return data ? data : {}
-    const {data} =await axios.request({
-      url:api+id,
-      method:'GET',
-      headers:{
-        "Content-Type":"application/json"
+    const { data } = await axios.request({
+      url: api + id,
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json"
       }
     })
     return data
+  },
+  async getFromGrapgQL(id) {
+    const query = `{
+      query_schemas{...}
+    }`
+    const { data } = await axios.post(graphQLApi, query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+    const res = data[id]
+    console.log(res)
+    return res
   }
 }
 

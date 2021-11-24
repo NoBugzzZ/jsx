@@ -2,7 +2,7 @@ import axios from "axios"
 import { create } from "lodash"
 import { getReponse } from "../utils"
 
-const api = "http://192.168.28.164:8090/graphql"
+const api = 'http://192.168.28.215:8090/graphql'
 
 export default {
   async getAllFromDataModelId(id) {
@@ -32,12 +32,12 @@ export default {
       }
     })
     console.log(data)
-    if(data){
+    if (data) {
       return data[Object.keys(data)[0]]
-    }else{
+    } else {
       return []
     }
-    
+
   },
   async getFromGraphQLById(id, schema, resolvedSchema) {
     var { title } = schema
@@ -58,18 +58,18 @@ export default {
     console.log(data)
     return data[Object.keys(data)[0]]
   },
-  async create(schema,formData){
+  async create(schema, formData) {
     var { title } = schema
     title = title.substring(0, 1).toLowerCase() + title.substring(1)
-    const query=`{
+    const query = `{
       create_${title}(
-        data:${JSON.stringify(formData,null,2).replace(/"([^"]+)":/g, '$1:')}
+        data:${JSON.stringify(formData, null, 2).replace(/"([^"]+)":/g, '$1:')}
         ){
         _id
       }
     }`
     console.log(query)
-    const {data}=await axios.post(api, query, {
+    const { data } = await axios.post(api, query, {
       headers: {
         'Content-Type': 'text/plain',
       }
@@ -77,7 +77,7 @@ export default {
     console.log(data)
     return data
   },
-  async getSource(schema){
+  async getSource(schema) {
 
   },
 }

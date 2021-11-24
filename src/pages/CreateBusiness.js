@@ -30,7 +30,7 @@ export default function CreateBusiness({ schemaId }) {
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
 
   useEffect(() => {
-    DataModelReq.get(schemaId).then(data => {
+    DataModelReq.getFromGrapgQL(schemaId).then(data => {
       const { formschema: { uischema, fieldschema } } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
       setSchema(fieldschema)
