@@ -17,11 +17,11 @@ export default {
     return mock.find(e => e.id === parseInt(id))
   },
   async getFromGraphQL(schema, resolvedSchema) {
-    var { title } = schema
-    title = title.substring(0, 1).toLowerCase() + title.substring(1)
+    var { nodeType } = schema
+    nodeType = nodeType.substring(0, 1).toLowerCase() + nodeType.substring(1)
     const response = getReponse(schema.properties, resolvedSchema.properties)
     const query = `{
-      query_${title}_list{
+      query_${nodeType}_list{
         _id
         ${response}
       }
@@ -41,11 +41,11 @@ export default {
 
   },
   async getFromGraphQLById(id, schema, resolvedSchema) {
-    var { title } = schema
-    title = title.substring(0, 1).toLowerCase() + title.substring(1)
+    var { nodeType } = schema
+    nodeType = nodeType.substring(0, 1).toLowerCase() + nodeType.substring(1)
     const response = getReponseForOne(schema.properties, resolvedSchema.properties)
     const query = `{
-      query_${title}(_id:"${id}"){
+      query_${nodeType}(_id:"${id}"){
         _id
         ${response}
       }
@@ -60,10 +60,10 @@ export default {
     return data[Object.keys(data)[0]]
   },
   async create(schema, formData) {
-    var { title } = schema
-    title = title.substring(0, 1).toLowerCase() + title.substring(1)
+    var { nodeType } = schema
+    nodeType = nodeType.substring(0, 1).toLowerCase() + nodeType.substring(1)
     const query = `{
-      create_${title}(
+      create_${nodeType}(
         data:${JSON.stringify(formData, null, 2).replace(/"([^"]+)":/g, '$1:')}
         ){
         _id

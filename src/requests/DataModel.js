@@ -2,7 +2,8 @@ import axios from "axios"
 import { API_URL } from '../config'
 // import { resolveRefSource } from "../utils"
 // var _ = require('lodash');
-const api=API_URL.GRAPHQL
+const api = API_URL.GRAPHQL
+const createURL = API_URL.CREATE
 
 export default {
   async get(id) {
@@ -26,13 +27,35 @@ export default {
         'Content-Type': 'text/plain',
       }
     })
-    var res = data[id]
-    // var {formschema:{fieldschema}}=res
-    // fieldschema=resolveRefSource(_.cloneDeep(fieldschema),API_URL.SOURCE)
-    // res.formschema.fieldschema=fieldschema
+    var res = data[Object.keys(data)[0]][parseInt(id)]
     console.log(res)
     return res
-  }
+  },
+  async getAllFromGrapgQL() {
+    const query = `{
+      query_schemas{...}
+    }`
+    const { data } = await axios.post(api, query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+    var res = data[Object.keys(data)[0]]
+    console.log(res)
+    return res
+  },
+  async createDataModel(formschema) {
+    const res = await axios.request({
+      url: createURL + '/schemas',
+      method: 'POST',
+      data: formschema,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    console.log(res)
+    return res
+  },
 }
 
 

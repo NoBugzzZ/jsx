@@ -10,7 +10,7 @@ import { resolveRef } from "../utils";
 
 var _ = require('lodash');
 
-const basicTypes = ['string', 'number', 'integer', 'boolean', 'null','link']
+const basicTypes = ['string', 'number', 'integer', 'boolean', 'null', 'link']
 // const arrayType = 'array'
 // const objectType = 'object'
 
@@ -38,7 +38,7 @@ export default function DataModel({ schemaId }) {
   const [heads, setHeads] = useState(null)
   const [sequence, setSequence] = useState(null)
   const [rows, setRows] = useState(null)
-  const [resolvedSchema,setResolvedSchema]=useState(null)
+  const [resolvedSchema, setResolvedSchema] = useState(null)
 
   useEffect(() => {
     setSchema(null)
@@ -59,7 +59,7 @@ export default function DataModel({ schemaId }) {
     //   setSequence(seq)
     // })
     DataModelReq.getFromGrapgQL(schemaId).then(data => {
-      var { formschema: { uischema, fieldschema } } = data
+      var { uischema, fieldschema } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
       setSchema(fieldschema)
       setResolvedSchema(newResolveSchema)
@@ -72,7 +72,7 @@ export default function DataModel({ schemaId }) {
 
   useEffect(() => {
     if (sequence) {
-      BusinessReq.getFromGraphQL(schema,resolvedSchema).then(data=>{
+      BusinessReq.getFromGraphQL(schema, resolvedSchema).then(data => {
         setRows(data)
       })
     }
@@ -101,19 +101,19 @@ export default function DataModel({ schemaId }) {
             var cells = []
             sequence.forEach((key) => {
               if (row.hasOwnProperty(key)) {
-                if(schema.properties[key].hasOwnProperty('$ref')){
-                  const k=resolvedSchema.properties[key].value==='id'?'_id':resolvedSchema.properties[key].value
+                if (schema.properties[key].hasOwnProperty('$ref')) {
+                  const k = resolvedSchema.properties[key].value === 'id' ? '_id' : resolvedSchema.properties[key].value
                   cells.push(<TableCell key={key} align="center">{row[key][k]}</TableCell>)
-                }else{
+                } else {
                   cells.push(<TableCell key={key} align="center">{row[key]}</TableCell>)
                 }
               } else {
-                if(key==='id'){
+                if (key === 'id') {
                   cells.push(<TableCell key={key} align="center">{row['_id']}</TableCell>)
-                }else{
+                } else {
                   cells.push(<TableCell key={key} align="center"></TableCell>)
                 }
-                
+
               }
             })
             cells.push(

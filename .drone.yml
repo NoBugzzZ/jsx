@@ -67,6 +67,7 @@ steps:
       - export REACT_APP_API_URL_DATA_MODEL=http://cora-dm.$${BASE_URL_WITH_PORT}/
       - 'export REACT_APP_API_URL_BUSINESS=http://jsx.$${BASE_URL_WITH_PORT}/graphql'
       - export REACT_APP_API_URL_GRAPHQL=http://jsx.$${BASE_URL_WITH_PORT}/graphql
+      - export REACT_APP_API_URL_CREATE=http://jsx.$${BASE_URL_WITH_PORT}/api/v1
       # TODO: Remove all warnings
       - CI=false npm run build
 

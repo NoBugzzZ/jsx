@@ -18,17 +18,17 @@ const toolbar = [
           {
             "type": "menuitem",
             "title": "预存",
-            "key": 1000
+            "key": 3
           },
           {
             "type": "menuitem",
             "title": "现金",
-            "key": 1001
+            "key": 0
           },
           {
             "type": "menuitem",
             "title": "毛利",
-            "key": 1002
+            "key": 4
           }
         ]
       },
@@ -40,32 +40,32 @@ const toolbar = [
           {
             "type": "menuitem",
             "title": "公司支出",
-            "key": 1003
+            "key": 5
           },
           {
             "type": "menuitem",
             "title": "保证金",
-            "key": 1004
+            "key": 6
           },
           {
             "type": "menuitem",
             "title": "现金工资",
-            "key": 1005
+            "key": 7
           },
           {
             "type": "menuitem",
             "title": "行政管理费用",
-            "key": 1006
+            "key": 8
           },
           {
             "type": "menuitem",
             "title": "客户支出",
-            "key": 1007
+            "key": 9
           },
           {
             "type": "menuitem",
             "title": "销售支出",
-            "key": 1008
+            "key": 10
           },
         ]
       }
@@ -79,29 +79,46 @@ const toolbar = [
       {
         "type": "menuitem",
         "title": "发票",
-        "key": 1009
+        "key": 1
       },
       {
         "type": "menuitem",
         "title": "回款",
-        "key": 1010
+        "key": 11
       },
       {
         "type": "menuitem",
         "title": "销售人员",
-        "key": 1011
+        "key": 2
       }
     ]
-  }
+  },
+  {
+    "type": "submenu",
+    "title": "模型管理",
+    "key": "模型管理",
+    "childs": [
+      {
+        "type": "menuitem",
+        "title": "数据模型",
+        "key": "datamodellist"
+      },
+      {
+        "type": "menuitem",
+        "title": "流程模型",
+        "key": "flowmodellist"
+      }
+    ]
+  },
 ]
 
 const getMenu = (menu) => {
-  var res=[]
-  menu.forEach((value)=>{
-    const {type,title,key}=value
-    if(type==='submenu'){
+  var res = []
+  menu.forEach((value) => {
+    const { type, title, key } = value
+    if (type === 'submenu') {
       res.push(<SubMenu title={title} key={key}>{getMenu(value.childs)}</SubMenu>)
-    }else if(type==='menuitem'){
+    } else if (type === 'menuitem') {
       res.push(<MenuItem key={key}>{title}</MenuItem>)
     }
   })
@@ -121,10 +138,13 @@ export default function CustomAppBar() {
       triggerSubMenuAction='hover'
       mode='horizontal'
       openAnimation="slide-up"
-      onClick={({ key }) => {
+      onClick={(ctx) => {
+        const { key } = ctx
         if (key === 'homepage') {
           navigate('/')
-        } else {
+        }else if(key==='datamodellist'||key==='flowmodellist'){
+          navigate(`/${key}`)
+        }else {
           navigate(`/datamodel/${key}`)
         }
       }}

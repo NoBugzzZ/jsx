@@ -31,7 +31,7 @@ export default function CreateBusiness({ schemaId }) {
 
   useEffect(() => {
     DataModelReq.getFromGrapgQL(schemaId).then(data => {
-      const { formschema: { uischema, fieldschema } } = data
+      const { uischema, fieldschema } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
       setSchema(fieldschema)
       setResolvedSchema(newResolveSchema)
@@ -54,7 +54,7 @@ export default function CreateBusiness({ schemaId }) {
             uiSchema={uiSchema}
             onSubmit={({ formData }) => {
               console.log(formData)
-              BusinessReq.create(schema,formData).then(data=>{
+              BusinessReq.create(schema, formData).then(data => {
                 console.log(data)
                 alert('创建成功')
               })
