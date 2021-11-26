@@ -148,8 +148,11 @@ export default function DMList() {
               onClick={() => {
                 console.log({ fieldschema: schema, uischema: uiSchema })
                 DataModelReq.createDataModel({ fieldschema: schema, uischema: uiSchema }).then(data=>{
-                  alert('创建成功')
+                  // alert('创建成功')
                   handleClose();
+                  DataModelReq.getAllFromGrapgQL().then(data=>{
+                    setRows(data)
+                  })
                 })
                 
               }}

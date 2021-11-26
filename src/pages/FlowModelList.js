@@ -149,8 +149,11 @@ export default function FMList() {
               onClick={() => {
                 console.log(graphEdit)
                 FlowModelReq.createFlowModel(graphEdit).then(data => {
-                  alert('创建成功')
+                  // alert('创建成功')
                   handleClose();
+                  FlowModelReq.getAllFromGrapgQL().then(data => {
+                    setRows(data)
+                  })
                 })
               }}
             >
