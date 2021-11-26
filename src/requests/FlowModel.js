@@ -35,7 +35,7 @@ export default {
     },
     async createFlowModel(flowmodel) {
         const res = await axios.request({
-            url: createURL + '/flowsDefinition',
+            url: createURL + '/flowDefinitions',
             method: 'POST',
             data: flowmodel,
             headers: {
