@@ -7,7 +7,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import { navigate } from "hookrouter";
 import { resolveRef } from "../utils";
+import QueryBuilder from "../components/QueryBuilder/QueryBuilder";
+import { makeStyles } from "@mui/styles";
 
+const useStyle=makeStyles({
+  container:{
+    marginTop:'20px'
+  }
+})
 var _ = require('lodash');
 
 const basicTypes = ['string', 'number', 'integer', 'boolean', 'null', 'link']
@@ -32,13 +39,14 @@ const getRowHead = ({ properties }) => {
 }
 
 export default function DataModel({ schemaId }) {
-
+  const classes=useStyle()
   const [schema, setSchema] = useState(null)
   const [uiSchema, setUiSchema] = useState(null)
   const [heads, setHeads] = useState(null)
   const [sequence, setSequence] = useState(null)
   const [rows, setRows] = useState(null)
   const [resolvedSchema, setResolvedSchema] = useState(null)
+  const [filter,setFilter]=useState('')
 
   useEffect(() => {
     setSchema(null)
@@ -47,6 +55,7 @@ export default function DataModel({ schemaId }) {
     setSequence(null)
     setRows(null)
     setResolvedSchema(null)
+    setFilter('')
 
     // DataModelReq.get(schemaId).then(data => {
     //   var { formschema: { uischema, fieldschema } } = data
@@ -78,8 +87,18 @@ export default function DataModel({ schemaId }) {
     }
   }, [sequence])
 
+  useEffect(()=>{
+    if(filter){
+      console.log(filter)
+      BusinessReq.getFromGraphQL(schema, resolvedSchema,filter).then(data => {
+        setRows(data)
+      })
+    }
+  },[filter])
+
   return (
-    <>
+    <div className={classes.container}>
+      <QueryBuilder resolvedSchema={resolvedSchema} sequence={sequence} setFilter={setFilter}/>
       <IconButton
         aria-label="add"
         color="primary"
@@ -146,6 +165,6 @@ export default function DataModel({ schemaId }) {
           }) : null}
         </TableBody>
       </Table>
-    </>
+    </div>
   )
 }

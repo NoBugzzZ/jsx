@@ -53,9 +53,7 @@ export default function CreateBusiness({ schemaId }) {
             schema={resolvedSchema}
             uiSchema={uiSchema}
             onSubmit={({ formData }) => {
-              console.log(formData)
               BusinessReq.create(schema, formData).then(data => {
-                console.log(data)
                 alert('创建成功')
               })
             }}

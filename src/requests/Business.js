@@ -16,16 +16,28 @@ export default {
   async get(id) {
     return mock.find(e => e.id === parseInt(id))
   },
-  async getFromGraphQL(schema, resolvedSchema) {
+  async getFromGraphQL(schema, resolvedSchema,filter='') {
     var { nodeType } = schema
     nodeType = nodeType.substring(0, 1).toLowerCase() + nodeType.substring(1)
     const response = getReponse(schema.properties, resolvedSchema.properties)
-    const query = `{
-      query_${nodeType}_list{
-        _id
-        ${response}
-      }
-    }`
+    var query=''
+    if(filter){
+      query=`{
+        query_${nodeType}_list(where:
+          ${filter}
+        ){
+          _id
+          ${response}
+        }
+      }`
+    }else{
+      query = `{
+        query_${nodeType}_list{
+          _id
+          ${response}
+        }
+      }`
+    }
     console.log(query)
     const { data } = await axios.post(api, query, {
       headers: {

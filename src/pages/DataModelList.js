@@ -146,7 +146,6 @@ export default function DMList() {
               autoFocus
               color="inherit"
               onClick={() => {
-                console.log({ fieldschema: schema, uischema: uiSchema })
                 DataModelReq.createDataModel({ fieldschema: schema, uischema: uiSchema }).then(data=>{
                   // alert('创建成功')
                   handleClose();

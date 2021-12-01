@@ -147,7 +147,6 @@ export default function FMList() {
               autoFocus
               color="inherit"
               onClick={() => {
-                console.log(graphEdit)
                 FlowModelReq.createFlowModel(graphEdit).then(data => {
                   // alert('创建成功')
                   handleClose();
