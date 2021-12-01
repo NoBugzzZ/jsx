@@ -97,7 +97,6 @@ export default function QueryBuilder({ resolvedSchema, sequence, setFilter }) {
   useEffect(() => {
     if (resolvedSchema && sequence) {
       const newConfig = _.cloneDeep(config)
-      // console.log(getFields(resolvedSchema,sequence))
       setConfig({ ...newConfig, fields: getFields(resolvedSchema, sequence) })
     }
   }, [resolvedSchema, sequence])
@@ -147,15 +146,6 @@ export default function QueryBuilder({ resolvedSchema, sequence, setFilter }) {
           }}>过滤</Button>
         </Grid>
       </Grid>
-      {/* <Query
-        {...config}
-        value={tree}
-        onChange={onChange}
-        renderBuilder={renderBuilder}
-      />
-      <Button style={{ margin: '10px' }} variant="contained" onClick={() => {
-        setFilter(JSON.stringify(QbUtils.mongodbFormat(tree, config), null, 2).replace(/"([^"]+)":/g, '$1:'))
-      }}>过滤</Button> */}
     </Paper>
   )
 }
