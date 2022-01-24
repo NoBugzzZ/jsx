@@ -6,13 +6,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import { navigate } from "hookrouter";
-import { resolveRef } from "../utils";
+import { resolveRef,transformType } from "../utils";
 import QueryBuilder from "../components/QueryBuilder/QueryBuilder";
 import { makeStyles } from "@mui/styles";
 
-const useStyle=makeStyles({
-  container:{
-    marginTop:'20px'
+const useStyle = makeStyles({
+  container: {
+    marginTop: '20px'
   }
 })
 var _ = require('lodash');
@@ -39,14 +39,14 @@ const getRowHead = ({ properties }) => {
 }
 
 export default function DataModel({ schemaId }) {
-  const classes=useStyle()
+  const classes = useStyle()
   const [schema, setSchema] = useState(null)
   const [uiSchema, setUiSchema] = useState(null)
   const [heads, setHeads] = useState(null)
   const [sequence, setSequence] = useState(null)
   const [rows, setRows] = useState(null)
   const [resolvedSchema, setResolvedSchema] = useState(null)
-  const [filter,setFilter]=useState('')
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     setSchema(null)
@@ -70,6 +70,7 @@ export default function DataModel({ schemaId }) {
     DataModelReq.getFromGrapgQL(schemaId).then(data => {
       var { uischema, fieldschema } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
+      newResolveSchema=transformType(_.cloneDeep(newResolveSchema))
       setSchema(fieldschema)
       setResolvedSchema(newResolveSchema)
       setUiSchema(uischema)
@@ -77,6 +78,7 @@ export default function DataModel({ schemaId }) {
       setHeads(res)
       setSequence(seq)
     })
+    console.log(window.sessionStorage.getItem('auth'))
   }, [schemaId])
 
   useEffect(() => {
@@ -87,18 +89,17 @@ export default function DataModel({ schemaId }) {
     }
   }, [sequence])
 
-  useEffect(()=>{
-    if(filter){
-      console.log(filter)
-      BusinessReq.getFromGraphQL(schema, resolvedSchema,filter).then(data => {
+  useEffect(() => {
+    if (filter) {
+      BusinessReq.getFromGraphQL(schema, resolvedSchema, filter).then(data => {
         setRows(data)
       })
     }
-  },[filter])
+  }, [filter])
 
   return (
     <div className={classes.container}>
-      <QueryBuilder resolvedSchema={resolvedSchema} sequence={sequence} setFilter={setFilter}/>
+      <QueryBuilder resolvedSchema={resolvedSchema} sequence={sequence} setFilter={setFilter} />
       <IconButton
         aria-label="add"
         color="primary"
@@ -116,7 +117,7 @@ export default function DataModel({ schemaId }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows ? rows.map(row => {
+          {rows && rows.length > 0 ? rows.map(row => {
             var cells = []
             sequence.forEach((key) => {
               if (row.hasOwnProperty(key)) {

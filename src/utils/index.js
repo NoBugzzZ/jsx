@@ -44,7 +44,9 @@ const getReponse = (schemaProperties, resolvedSchemaProperties) => {
         if (key === 'id') {
 
         } else {
-          response = response + key + '\n'
+          if(schemaProperties[key].type==='string'){
+            response = response + key + '\n'
+          }
         }
       }
     }
@@ -58,8 +60,8 @@ const getK = (key, value) => {
     k = value === 'id' ? '_id' : value
   } else {
     k = key === 'id' ? '_id' : key
-    k+='\n'
-    k +=  value === 'id' ? '_id' : value
+    k += '\n'
+    k += value === 'id' ? '_id' : value
   }
   return k
 }
@@ -85,7 +87,9 @@ const getReponseForOne = (schemaProperties, resolvedSchemaProperties) => {
         if (key === 'id') {
 
         } else {
-          response = response + key + '\n'
+          if(schemaProperties[key].type==='string'){
+            response = response + key + '\n'
+          }
         }
       }
     }
@@ -109,4 +113,30 @@ const resolveRefSource = (schema, sourceUrl) => {
   return schema
 }
 
-export { resolveRef, getReponse, resolveRefSource, getReponseForOne }
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max)
+}
+
+const transformType = (schema) => {
+  const { type } = schema
+  if (type === 'object') {
+    for (var key in schema.properties) {
+      schema.properties[key] = transformType(schema.properties[key])
+    }
+  } else if (type === 'array') {
+    schema.items = transformType(schema.items)
+  } else {
+    if (type === 'bool') {
+      return {
+        ...schema,
+        type: 'boolean'
+      }
+    } else {
+      return schema
+    }
+  }
+  return schema
+}
+
+
+export { resolveRef, getReponse, resolveRefSource, getReponseForOne, getRandomInt,transformType }

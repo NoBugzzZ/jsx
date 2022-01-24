@@ -8,7 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import Graph from '../components/Graph/Graph'
-import { resolveRef } from "../utils";
+import { resolveRef, transformType } from "../utils";
 
 var _ = require('lodash');
 
@@ -33,6 +33,7 @@ export default function CreateBusiness({ schemaId }) {
     DataModelReq.getFromGrapgQL(schemaId).then(data => {
       const { uischema, fieldschema } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
+      newResolveSchema = transformType(_.cloneDeep(newResolveSchema))
       setSchema(fieldschema)
       setResolvedSchema(newResolveSchema)
       setUiSchema(uischema)

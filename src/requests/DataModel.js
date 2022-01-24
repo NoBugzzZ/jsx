@@ -1,7 +1,6 @@
 import axios from "axios"
 import { API_URL } from '../config'
-// import { resolveRefSource } from "../utils"
-// var _ = require('lodash');
+import { getRandomInt } from "../utils"
 const api = API_URL.GRAPHQL
 const createURL = API_URL.CREATE
 
@@ -56,9 +55,28 @@ export default {
     console.log(res)
     return res
   },
+  async isAccess(id, auth) {
+    const query = `{
+      query_schemas{...}
+    }`
+    const { data } = await axios.post(api, query, {
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    })
+    var schema = data[Object.keys(data)[0]][parseInt(id)]
+    console.log(schema)
+    const schemaAuth=schema.auth
+    if(schemaAuth&&schemaAuth===auth){
+      return true
+    }
+    return false
+  }
 }
 
-
+const auths = [
+  "saler", "manager", "engineer", "assitsaler"
+]
 const mock = [
   {
     id: 1000,

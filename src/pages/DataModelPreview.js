@@ -5,7 +5,7 @@ import Editor from "@monaco-editor/react";
 import FixedHeightContainer from "../components/FixedHeightContainer";
 import CustomForm from "../components/Form/CustomForm";
 import { DataModelReq } from "../requests";
-import { resolveRef } from "../utils";
+import { resolveRef, transformType } from "../utils";
 
 var _ = require('lodash');
 
@@ -13,12 +13,13 @@ export default function DataModelPreview({ id }) {
 
   const [schema, setSchema] = React.useState({});
   const [uiSchema, setUiSchema] = React.useState({});
-  const [resolvedSchema,setResolvedSchema]=React.useState({})
+  const [resolvedSchema, setResolvedSchema] = React.useState({})
 
   React.useEffect(() => {
     DataModelReq.getFromGrapgQL(id).then(data => {
       var { uischema, fieldschema } = data
       var newResolveSchema = resolveRef(_.cloneDeep(fieldschema))
+      newResolveSchema = transformType(_.cloneDeep(newResolveSchema))
       setSchema(fieldschema)
       setResolvedSchema(newResolveSchema)
       setUiSchema(uischema)

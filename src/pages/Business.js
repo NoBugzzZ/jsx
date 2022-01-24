@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { BusinessReq, DataModelReq } from "../requests"
 import CustomForm from '../components/Form/CustomForm'
 import { Paper } from "@mui/material"
-import { resolveRef } from "../utils";
+import { resolveRef, transformType } from "../utils";
 
 var _ = require('lodash');
 
@@ -41,6 +41,7 @@ export default function Business({ schemaId, id }) {
     DataModelReq.getFromGrapgQL(schemaId).then(data => {
       var { uischema, fieldschema } = data
       var newResolvedSchema = resolveRef(_.cloneDeep(fieldschema))
+      newResolvedSchema=transformType(_.cloneDeep(newResolvedSchema))
       setSchema(fieldschema)
       setResolvedSchema(newResolvedSchema)
       setUiSchema(uischema)

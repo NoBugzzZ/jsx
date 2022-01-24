@@ -7,7 +7,7 @@ export default function (props) {
         paper: {
             padding: theme.spacing(2),
             display: "flex",
-            overflow: "hidden",
+            overflow: "scroll",
             flexDirection: "column",
         },
         fixedHeight: {
