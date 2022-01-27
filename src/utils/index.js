@@ -44,9 +44,7 @@ const getReponse = (schemaProperties, resolvedSchemaProperties) => {
         if (key === 'id') {
 
         } else {
-          if(schemaProperties[key].type==='string'){
-            response = response + key + '\n'
-          }
+          response = response + key + '\n'
         }
       }
     }
@@ -87,9 +85,7 @@ const getReponseForOne = (schemaProperties, resolvedSchemaProperties) => {
         if (key === 'id') {
 
         } else {
-          if(schemaProperties[key].type==='string'){
-            response = response + key + '\n'
-          }
+          response = response + key + '\n'
         }
       }
     }

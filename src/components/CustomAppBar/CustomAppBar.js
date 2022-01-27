@@ -47,23 +47,23 @@ const toolbar = [
           {
             "type": "menuitem",
             "title": "行政管理支出",
-            "key": 11,
+            "key": "AdminFee",
             "page": "datamodel",
-            "set":12
+            "set":"AdminFeeSet"
           },
           {
             "type": "menuitem",
             "title": "总经办支出",
-            "key": 13,
+            "key": "ManageFee",
             "page": "datamodel",
-            "set": 14
+            "set": "ManageFeeSet"
           },
           {
             "type": "menuitem",
             "title": "销售支出",
-            "key": 4,
+            "key": "SalerExpense",
             "page": "datamodel",
-            "set":10
+            "set":"SalerExpenseSet"
           },
         ]
       }
@@ -72,16 +72,16 @@ const toolbar = [
   {
     "type": "menuitem",
     "title": "预存",
-    "key": 8,
+    "key": "Prestore",
     "page": "datamodel",
-    "set":9
+    "set":"PrestoreSet"
   },
   {
     "type": "menuitem",
     "title": "投标保证金",
-    "key": 15,
+    "key": "Bidbond",
     "page": "datamodel",
-    "set": 16
+    "set": "BidbondSet"
   },
   {
     "type": "submenu",
@@ -91,25 +91,25 @@ const toolbar = [
       {
         "type": "menuitem",
         "title": "现金收入",
-        "key": 17,
+        "key": "CashIncome",
         "page": "datamodel",
-        "set":18
+        "set":"CashIncomeSet"
       },
       {
         "type": "menuitem",
         "title": "现金支出",
-        "key": 3,
+        "key": "CashExpense",
         "page": "datamodel",
-        "set":19
+        "set":"CashExpenseSet"
       },
     ]
   },
   {
     "type": "menuitem",
     "title": "未确认款项",
-    "key": 20,
+    "key": "Unack",
     "page": "datamodel",
-    "set":21
+    "set":"UnackSet"
   }
 ]
 

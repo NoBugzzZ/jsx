@@ -26,7 +26,8 @@ export default {
         'Content-Type': 'text/plain',
       }
     })
-    var res = data[Object.keys(data)[0]][parseInt(id)]
+    const allData=data[Object.keys(data)[0]]
+    var res = allData.find(e=>e.fieldschema.nodeType===id)
     console.log(res)
     return res
   },
@@ -56,6 +57,7 @@ export default {
     return res
   },
   async isAccess(id, auth) {
+    console.log(id)
     const query = `{
       query_schemas{...}
     }`
@@ -64,8 +66,8 @@ export default {
         'Content-Type': 'text/plain',
       }
     })
-    var schema = data[Object.keys(data)[0]][parseInt(id)]
-    console.log(schema)
+    const allData=data[Object.keys(data)[0]]
+    var schema = allData.find(e=>e.fieldschema.nodeType===id)
     const schemaAuth=schema.auth
     if(schemaAuth&&schemaAuth===auth){
       return true
