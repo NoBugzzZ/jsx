@@ -17,7 +17,7 @@ export default function (props) {
   }, [props])
 
   const handleOnFocus = () => {
-    let localsession = window.localStorage.getItem("jsx-cache")
+    let localsession = window.localStorage.getItem(`jsx-cache-${label}`)
     localsession = localsession ? localsession : '[]'
     localsession = JSON.parse(localsession)
     setOptions(localsession)
@@ -36,7 +36,7 @@ export default function (props) {
         let newOption = options.map(e => ({ ...e }))
         newOption.push({ label: value })
         let localsession = JSON.stringify(newOption)
-        window.localStorage.setItem("jsx-cache", localsession)
+        window.localStorage.setItem(`jsx-cache-${label}`, localsession)
       }
     }
   }
