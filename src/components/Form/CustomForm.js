@@ -3,6 +3,7 @@ import React from "react";
 import CustomDate from "./CustomDate";
 import CustomMonth from "./CustomMonth";
 // import CustomFile from "./CumtomFile"
+import AutocompleteWidget from './AutocompleteWidget';
 
 {/**usage
 
@@ -31,6 +32,7 @@ export default function (props) {
     "month-date": CustomMonth,
     // "base64-file": CustomFile,
     // "link": Link,
+    "cache-input":AutocompleteWidget
   }
 
   return (

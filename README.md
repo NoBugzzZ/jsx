@@ -4,9 +4,9 @@
 是否修改去掉
 * [**finish**] 开销类别改为枚举
 * [**finish**] 销售人员/公司改为link-写一个component，schema里直接引用widget
-* [**form自带cache**] 客户单位/联络人-cached input
+* [**finish**] 客户单位/联络人-cached input
 * [**finish**] 日期-date input组件
 * [**finish**] 月份-date input组件，输入月份
 
 
-* array类型创建数据有问题
+* array类型创建数据可能有点问题
